@@ -39,7 +39,7 @@
             <!--Sidebar-->
             <div class="col-3 p-3 overflow-y-scroll shadow-lg bg-dark" style="border-radius: 15px; max-height: 95vh;">
                 <h4 class="fw-bold text-center" > Analyze Ticker</h4>
-                {% for tkr, name in ticker %}
+                {% for tkr, name in ticker.items %}
                 <a href="/ticker/{{ tkr }}">
                     <div class="card mb-2 shadow-lg bg-dark-subtle">
                         <div class="card-body fw-bold">{{ name }} {{ tkr }}</div>
@@ -304,7 +304,21 @@
                     </script>
                     <div id="ohlcv-div" style="width: 100%; height: 550px;"></div>
                 </div>
-                <div class="card shadow-lg mb-3" style="border-radius: 15px; height: 490px;"></div>
+                <div class="card shadow-lg mb-3" style="border-radius: 15px; height: 490px;">
+                    <div class="card-header fw-bold">
+                        News Articles
+                    </div>
+                    <div class="card-body p-2 overflow-y-scroll" style="height: 400px;">
+                        <ul class="list-group list-group-flush">
+                            {% for entry in news %}
+                                <a href="{{ entry.link }}" class="list-group-item list-group-item-action list-group-info fw-bold" target="_blank">
+                                    {{ entry.title }} <br>
+                                    - {{ entry.publisher}}
+                                </a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
