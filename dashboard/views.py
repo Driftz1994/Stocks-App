@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 import yfinance as yf 
+import pandas as pd
 # Create your views here.
 
 tickers = ["AAPL", "NVDA", "GOOGL", "MSFT", "BAC", "META", "AMZN", "NFLX", "ADBE", "TSLA", "JPM", "CRM", "NKE", "QCOM"]
@@ -21,8 +22,16 @@ def retrieve_data(ticker):
     ## News Data
     news_data = [{"title": entry["title"], "link": entry["link"], "publisher": entry["publisher"]}\
                  for entry in ticker_obj.news]
+    ## Bar Chart Data
+    financials_df = ticker_obj.financials
+    financials_df = financials_df[financials_df.index.isin(["Total Revenue", "EBITDA", "Gross Profit", "Operating Expense"])]
+    financials_df.columns = financials_df.columns.year
+    financial_data = financials_df.T.to_dict(orient="records")
+    for i, entry in enumerate(financial_data):
+        entry["year"] = str(financials_df.columns.values[i])
+
     
-    return hist_df, ticker_info, news_data
+    return hist_df, ticker_info, news_data, financial_data
 
 def display_ticker(request, ticker):
     hist_df, info, news_data = retrieve_data(ticker)
